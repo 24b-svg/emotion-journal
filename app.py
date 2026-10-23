@@ -106,7 +106,7 @@ def get_ai_emotion(text):
     return "Calm", 0.94
 
 # ============================================================
-# EMOTION PROFILES & THEMES
+# EMOTION THEMES
 # ============================================================
 EMOTION_THEMES = {
     "Calm": {
@@ -158,159 +158,147 @@ if "last_analyzed" in st.session_state:
 theme = EMOTION_THEMES.get(current_emotion, EMOTION_THEMES["Calm"])
 
 # ============================================================
-# PREMIUM MODERN CSS STYLING
+# BULLETPROOF VISIBILITY CSS
 # ============================================================
 st.markdown(f"""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
+    /* Force readable dark text everywhere */
     html, body, [class*="css"] {{
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        color: #1A202C !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        color: #1E293B !important;
     }}
 
     .stApp {{
-        background-color: #F8FAF9 !important;
+        background-color: #F4F6F4 !important;
     }}
 
-    /* Top Navigation Header Banner */
+    /* Sidebar Styling Fix */
+    [data-testid="stSidebar"] {{
+        background-color: #E6EFE8 !important;
+        border-right: 1px solid #D1E0D3;
+    }}
+    
+    [data-testid="stSidebar"] span, [data-testid="stSidebar"] p, [data-testid="stSidebar"] label {{
+        color: #1E293B !important;
+        font-weight: 500 !important;
+    }}
+
+    /* Top Header Banner */
     .top-header-banner {{
         display: flex;
         justify-content: space-between;
         align-items: center;
         background: #FFFFFF;
-        padding: 12px 24px;
-        border-radius: 14px;
-        border: 1px solid #E2E8F0;
-        margin-bottom: 24px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        padding: 14px 24px;
+        border-radius: 12px;
+        border: 1px solid #DDE3E9;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }}
 
-    /* Sidebar Styling */
-    [data-testid="stSidebar"] {{
-        background-color: #F1F5F2 !important;
-        border-right: 1px solid #E2E8F0;
-        padding-top: 1rem;
-    }}
-
-    h1, h2, h3, h4 {{
-        font-family: 'DM Serif Display', serif !important;
+    h1, h2, h3 {{
         color: #0F172A !important;
-        letter-spacing: -0.01em;
+        font-weight: 700 !important;
     }}
 
-    h1 {{
-        font-size: 2.2rem !important;
-        margin-bottom: 0.2rem !important;
-    }}
-
-    /* Premium SaaS Card Containers */
+    /* Card Containers */
     .custom-card {{
         background: #FFFFFF !important;
-        border-radius: 20px;
-        padding: 28px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-        border: 1px solid #E2E8F0;
-        margin-bottom: 24px;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        border: 1px solid #DDE3E9;
+        margin-bottom: 20px;
     }}
 
     .metric-card {{
         background: #FFFFFF !important;
-        border-radius: 16px;
-        padding: 24px;
+        border-radius: 14px;
+        padding: 20px;
         text-align: center;
-        border: 1px solid #E2E8F0;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+        border: 1px solid #DDE3E9;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
     }}
 
     .metric-value {{
-        font-family: 'DM Serif Display', serif;
-        font-size: 2rem;
+        font-size: 1.8rem;
+        font-weight: 700;
         color: {theme['primary_color']} !important;
-        margin-top: 6px;
+        margin-top: 4px;
     }}
 
     .metric-label {{
-        font-size: 0.78rem;
+        font-size: 0.75rem;
         color: #64748B !important;
         text-transform: uppercase;
         letter-spacing: 0.08em;
         font-weight: 700;
     }}
 
-    /* Pill Button Styling */
+    /* Buttons */
     .stButton>button {{
         background: {theme['primary_color']} !important;
         color: #FFFFFF !important;
-        border-radius: 50px !important;
-        padding: 12px 32px !important;
+        border-radius: 30px !important;
+        padding: 10px 24px !important;
         font-weight: 600 !important;
-        font-size: 0.95rem !important;
         border: none !important;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.12) !important;
-        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
         display: block !important;
         margin: 0 auto !important;
     }}
 
-    .stButton>button:hover {{
-        opacity: 0.92;
-        transform: translateY(-1px);
-    }}
-
+    /* Text Area */
     .stTextArea textarea {{
-        border-radius: 14px !important;
+        border-radius: 10px !important;
         border: 1px solid #CBD5E1 !important;
-        background-color: #FAFAFA !important;
+        background-color: #FFFFFF !important;
         color: #0F172A !important;
-        font-size: 1rem !important;
-        padding: 14px !important;
+        font-size: 0.95rem !important;
     }}
 
-    /* Quote Banner */
+    /* Quote Box */
     .quote-box {{
         background: {theme['accent_light']} !important;
-        border-radius: 18px;
-        padding: 28px;
-        border-left: 5px solid {theme['primary_color']};
-        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        border-radius: 14px;
+        padding: 20px;
+        border-left: 4px solid {theme['primary_color']};
     }}
 
     .quote-title {{
         color: {theme['primary_color']} !important;
         font-weight: 700;
         font-size: 0.75rem;
-        letter-spacing: 0.1em;
-        margin-bottom: 10px;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
         text-transform: uppercase;
     }}
 
     .quote-text {{
-        font-family: 'DM Serif Display', serif;
-        font-size: 1.3rem;
+        font-size: 1.15rem;
         color: #0F172A !important;
         font-style: italic;
-        line-height: 1.5;
+        line-height: 1.4;
     }}
 
     .history-item {{
         background: #FFFFFF !important;
-        border-radius: 14px;
-        padding: 18px 22px;
-        margin-bottom: 12px;
-        border: 1px solid #E2E8F0;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 10px;
+        border: 1px solid #DDE3E9;
         display: flex;
         align-items: center;
         justify-content: space-between;
     }}
 
-    /* Tags */
-    .badge-calm {{ background: #E6F4EA; color: #137333; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }}
-    .badge-joyful {{ background: #FEF7E0; color: #B06000; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }}
-    .badge-anxious {{ background: #E8F0FE; color: #1A56B0; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }}
-    .badge-sad {{ background: #F3EEF9; color: #5B3A82; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }}
-    .badge-angry {{ background: #FDF2F2; color: #9E2A2B; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }}
+    .badge-calm {{ background: #E6F4EA; color: #137333; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.75rem; }}
+    .badge-joyful {{ background: #FEF7E0; color: #B06000; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.75rem; }}
+    .badge-anxious {{ background: #E8F0FE; color: #1A56B0; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.75rem; }}
+    .badge-sad {{ background: #F3EEF9; color: #5B3A82; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.75rem; }}
+    .badge-angry {{ background: #FDF2F2; color: #9E2A2B; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.75rem; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -318,29 +306,30 @@ st.markdown(f"""
 # SIDEBAR NAVIGATION
 # ============================================================
 with st.sidebar:
-    st.markdown("<h2 style='font-size: 1.4rem; margin-bottom: 15px; color: #1E293B;'>🌿 Emotion Journal</h2>", unsafe_allow_html=True)
+    st.markdown("### 🌿 Emotion Journal")
+    st.markdown("<hr style='margin: 10px 0;'>", unsafe_allow_html=True)
     
     navigation = st.radio(
-        "NAVIGATION",
+        "Navigation",
         ["Dashboard", "Mood Tracking", "Gentle Recall", "Psychologist Portal"],
         index=0,
         label_visibility="collapsed"
     )
     
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
     st.caption("ACTIVE MOOD SPACE")
-    st.markdown(f"<div style='font-weight: 600; color: {theme['primary_color']}; font-size: 0.95rem; margin-top: 4px;'>• Reflective {current_emotion}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-weight: 700; color: {theme['primary_color']}; font-size: 0.9rem; margin-top: 4px;'>• Reflective {current_emotion}</div>", unsafe_allow_html=True)
 
 # ============================================================
-# TOP HEADER BAR (Like Professional Reference UI)
+# TOP HEADER BAR
 # ============================================================
 st.markdown(f"""
 <div class='top-header-banner'>
-    <div style='display: flex; align-items: center; gap: 10px;'>
-        <span style='font-size: 1.2rem;'>🌿</span>
-        <span style='font-weight: 700; color: #0F172A; font-size: 0.95rem;'>Emotion Journal System</span>
+    <div style='display: flex; align-items: center; gap: 8px;'>
+        <span style='font-size: 1.1rem;'>🌿</span>
+        <span style='font-weight: 700; color: #0F172A; font-size: 0.9rem;'>Emotion Journal System</span>
     </div>
-    <div style='background: {theme['accent_light']}; color: {theme['primary_color']}; padding: 6px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 700;'>
+    <div style='background: {theme['accent_light']}; color: {theme['primary_color']}; padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;'>
         Current Mood: {current_emotion}
     </div>
 </div>
@@ -355,11 +344,11 @@ if navigation == "Dashboard":
     st.markdown("<br>", unsafe_allow_html=True)
     
     st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
-    st.markdown("### ✍️ Write your thoughts here:")
+    st.markdown("<h4 style='margin-bottom: 10px; color: #0F172A;'>✍️ Write your thoughts here:</h4>", unsafe_allow_html=True)
     journal_text = st.text_area(
         "",
         placeholder="Start writing about your day, your thoughts, or how you feel...",
-        height=150,
+        height=140,
         label_visibility="collapsed"
     )
     
@@ -404,7 +393,7 @@ if navigation == "Dashboard":
             <div class='metric-card'>
                 <div class='metric-label'>DETECTED EMOTION</div>
                 <div class='metric-value'>{curr_emotion}</div>
-                <p style='color: #64748B; font-size: 0.85rem; margin-top: 8px;'>{res_data['subtext']}</p>
+                <p style='color: #64748B; font-size: 0.85rem; margin-top: 6px;'>{res_data['subtext']}</p>
             </div>
             """, unsafe_allow_html=True)
             
@@ -413,13 +402,13 @@ if navigation == "Dashboard":
             <div class='metric-card'>
                 <div class='metric-label'>CONFIDENCE SCORE</div>
                 <div class='metric-value'>{curr_conf * 100:.2f}%</div>
-                <div style='background-color: #E2E8F0; border-radius: 10px; height: 6px; width: 85%; margin: 14px auto 0 auto;'>
+                <div style='background-color: #E2E8F0; border-radius: 10px; height: 6px; width: 80%; margin: 12px auto 0 auto;'>
                     <div style='background-color: {res_data['primary_color']}; width: {curr_conf * 100}%; height: 100%; border-radius: 10px;'></div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
 
-        st.markdown("<h3 style='margin-top: 40px; margin-bottom: 20px;'>Resources for your Spirit</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='margin-top: 35px; margin-bottom: 15px;'>Resources for your Spirit</h3>", unsafe_allow_html=True)
         
         col_r1, col_r2 = st.columns(2)
         with col_r1:
@@ -434,11 +423,11 @@ if navigation == "Dashboard":
             st.markdown(f"""
             <div class='custom-card' style='height: 100%; margin-bottom: 0;'>
                 <div class='quote-title'>🎵 MUSIC RECOMMENDATION</div>
-                <h4 style='margin-top: 6px; font-family: "DM Serif Display", serif;'>"{res_data['music']}"</h4>
-                <p style='color: #64748B; font-size: 0.85rem; margin-top: 6px;'>Curated audio soundscapes tailored for your emotional state.</p>
-                <div style='margin-top: 20px;'>
+                <h4 style='margin-top: 4px; color: #0F172A;'>"{res_data['music']}"</h4>
+                <p style='color: #64748B; font-size: 0.85rem; margin-top: 4px;'>Curated audio soundscapes tailored for your emotional state.</p>
+                <div style='margin-top: 15px;'>
                     <a href='{res_data['music_url']}' target='_blank' style='text-decoration: none;'>
-                        <button style='background: {res_data['accent_light']}; color: {res_data['primary_color']}; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 0.85rem;'>🎧 Open in Spotify</button>
+                        <button style='background: {res_data['accent_light']}; color: {res_data['primary_color']}; border: none; padding: 8px 18px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 0.85rem;'>🎧 Open in Spotify</button>
                     </a>
                 </div>
             </div>
@@ -494,7 +483,7 @@ elif navigation == "Mood Tracking":
         fig.update_layout(
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(family="Plus Jakarta Sans", color="#1A202C"),
+            font=dict(family="Plus Jakarta Sans", color="#1E293B"),
             margin=dict(l=20, r=20, t=20, b=20)
         )
         st.plotly_chart(fig, use_container_width=True)
@@ -506,7 +495,7 @@ elif navigation == "Mood Tracking":
             st.markdown(f"""
             <div class='history-item'>
                 <div>
-                    <span style='font-size: 0.78rem; color: #64748B; font-weight: 700;'>{row['timestamp']}</span>
+                    <span style='font-size: 0.75rem; color: #64748B; font-weight: 700;'>{row['timestamp']}</span>
                     <p style='margin: 4px 0 0 0; color: #1E293B; font-size: 0.95rem;'>{row['text']}</p>
                 </div>
                 <div>
