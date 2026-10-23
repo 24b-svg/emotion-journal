@@ -106,7 +106,7 @@ def get_ai_emotion(text):
     return "Calm", 0.94
 
 # ============================================================
-# EMOTION THEME PROFILES & DYNAMIC CONTENT
+# EMOTION THEME PROFILES
 # ============================================================
 EMOTION_THEMES = {
     "Calm": {
@@ -178,7 +178,7 @@ if "last_analyzed" in st.session_state:
 theme = EMOTION_THEMES.get(current_emotion, EMOTION_THEMES["Calm"])
 
 # ============================================================
-# CSS STYLING
+# BULLETPROOF HIGH-CONTRAST CSS
 # ============================================================
 st.markdown(f"""
 <style>
@@ -186,17 +186,33 @@ st.markdown(f"""
 
     html, body, [class*="css"] {{
         font-family: 'Plus Jakarta Sans', sans-serif !important;
-        color: #2D3748 !important;
+        color: #1A202C !important;
     }}
 
     .stApp {{
         background-color: #F6F5F1 !important;
     }}
 
+    /* FIXED SIDEBAR: Force crisp dark text on everything inside */
     [data-testid="stSidebar"] {{
-        background-color: #F0EFEA !important;
-        border-right: 1px solid #E2E0D8 !important;
+        background-color: #EAE6DC !important;
+        border-right: 1px solid #D5D0C0 !important;
         padding-top: 1rem;
+    }}
+
+    [data-testid="stSidebar"] *, 
+    [data-testid="stSidebar"] span, 
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] div {{
+        color: #1A202C !important;
+    }}
+
+    /* Make radio buttons clearly visible and dark */
+    [data-testid="stSidebar"] .stRadio label {{
+        color: #1A202C !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
     }}
 
     h1, h2, h3, .serif-text {{
@@ -216,8 +232,8 @@ st.markdown(f"""
         align-items: center;
         padding: 10px 0 20px 0;
         font-size: 0.8rem;
-        color: #718096;
-        font-weight: 600;
+        color: #4A5568;
+        font-weight: 700;
         letter-spacing: 0.05em;
         text-transform: uppercase;
     }}
@@ -238,8 +254,8 @@ st.markdown(f"""
         background: #FFFFFF !important;
         border-radius: 20px;
         padding: 26px;
-        border: 1px solid #E6E4DC;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        border: 1px solid #D8D4C5;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         margin-bottom: 20px;
     }}
 
@@ -247,7 +263,7 @@ st.markdown(f"""
         background: #FFFFFF !important;
         border-radius: 16px;
         padding: 20px;
-        border: 1px solid #E6E4DC;
+        border: 1px solid #D8D4C5;
         margin-bottom: 15px;
     }}
 
@@ -269,9 +285,9 @@ st.markdown(f"""
 
     .stTextArea textarea {{
         border-radius: 14px !important;
-        border: 1px solid #E2E0D8 !important;
-        background-color: #FAFAF8 !important;
-        color: #2D3748 !important;
+        border: 1px solid #CBD5E0 !important;
+        background-color: #FFFFFF !important;
+        color: #1A202C !important;
         font-size: 0.98rem !important;
         padding: 16px !important;
         line-height: 1.6 !important;
@@ -297,7 +313,7 @@ st.markdown(f"""
         border-radius: 14px;
         padding: 16px;
         margin-bottom: 10px;
-        border: 1px solid #E6E4DC;
+        border: 1px solid #D8D4C5;
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -306,20 +322,20 @@ st.markdown(f"""
 # SIDEBAR NAVIGATION
 # ============================================================
 df_all = get_all_entries()
-total_entry_count = len(df_all)
 
 with st.sidebar:
     st.markdown("""
     <div style='display: flex; align-items: center; gap: 10px; margin-bottom: 20px;'>
         <div style='background: #1E3A2B; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem;'>🍃</div>
         <div>
-            <div style='font-family: "Newsreader", serif; font-size: 1.25rem; color: #1A202C;'>Emotion Journal</div>
-            <div style='font-size: 0.7rem; color: #718096; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;'>Private Space</div>
+            <div style='font-family: "Newsreader", serif; font-size: 1.25rem; color: #1A202C; font-weight: 700;'>Emotion Journal</div>
+            <div style='font-size: 0.7rem; color: #4A5568; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;'>Private Space</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    st.caption("WORKSPACE")
+    st.markdown("<p style='font-size: 0.75rem; font-weight: 700; color: #4A5568; letter-spacing: 0.08em; margin-bottom: 5px;'>WORKSPACE</p>", unsafe_allow_html=True)
+    
     navigation = st.radio(
         "",
         ["Dashboard", "Mood Tracking", "Gentle Recall", "Psychologist Portal"],
@@ -331,10 +347,10 @@ with st.sidebar:
 
     # Active Mood Card
     st.markdown(f"""
-    <div style='background: {theme["badge_bg"]}; border-radius: 16px; padding: 16px; margin-bottom: 20px;'>
-        <div style='font-size: 0.7rem; color: {theme["primary"]}; font-weight: 700; letter-spacing: 0.08em;'>• ACTIVE MOOD SPACE</div>
-        <div style='font-family: "Newsreader", serif; font-size: 1.15rem; color: {theme["primary"]}; margin-top: 2px;'>Reflective {current_emotion}</div>
-        <div style='font-size: 0.72rem; color: #4A5568; margin-top: 2px;'>Interface tuned to your latest entry</div>
+    <div style='background: {theme["badge_bg"]}; border-radius: 16px; padding: 16px; margin-bottom: 20px; border: 1px solid #CBD5E0;'>
+        <div style='font-size: 0.7rem; color: {theme["primary"]}; font-weight: 800; letter-spacing: 0.08em;'>• ACTIVE MOOD SPACE</div>
+        <div style='font-family: "Newsreader", serif; font-size: 1.15rem; color: {theme["primary"]}; font-weight: 700; margin-top: 2px;'>Reflective {current_emotion}</div>
+        <div style='font-size: 0.72rem; color: #2D3748; margin-top: 2px;'>Interface tuned to your latest entry</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -346,7 +362,7 @@ st.markdown(f"""
     <div>WORKSPACE &nbsp;›&nbsp; <span style='color: #1A202C;'>{navigation.upper()}</span></div>
     <div style='display: flex; align-items: center; gap: 12px;'>
         <div class='mood-status-pill'>🟢 CURRENT MOOD: {current_emotion.upper()}</div>
-        <div style='font-size: 0.75rem; color: #718096; background: #FFFFFF; padding: 4px 12px; border-radius: 20px; border: 1px solid #E6E4DC;'>🔒 End-to-end encrypted</div>
+        <div style='font-size: 0.75rem; color: #1A202C; background: #FFFFFF; padding: 4px 12px; border-radius: 20px; border: 1px solid #CBD5E0; font-weight: 600;'>🔒 End-to-end encrypted</div>
     </div>
 </div>
 """, unsafe_allow_html=True)
@@ -357,19 +373,18 @@ st.markdown(f"""
 if navigation == "Dashboard":
     today_str = datetime.datetime.now().strftime("%A, %d %B").upper()
     
-    st.markdown(f"<div style='font-size: 0.75rem; color: #718096; font-weight: 700; letter-spacing: 0.08em;'>• {today_str}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-size: 0.75rem; color: #4A5568; font-weight: 800; letter-spacing: 0.08em;'>• {today_str}</div>", unsafe_allow_html=True)
     st.markdown("<h1>Welcome to your Space</h1>", unsafe_allow_html=True)
     st.caption("Write down your thoughts below for real-time emotional insights and ambient reflection.")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # Input Container
     st.markdown("<div class='ui-card'>", unsafe_allow_html=True)
     
     st.markdown("""
     <div style='display: flex; align-items: center; gap: 8px; margin-bottom: 8px;'>
         <span style='background: #E2EFE7; color: #1E3A2B; padding: 4px 8px; border-radius: 8px; font-size: 0.85rem;'>🍃</span>
-        <span style='font-family: "Newsreader", serif; font-size: 1.4rem; color: #1A202C;'>Write your thoughts here</span>
+        <span style='font-family: "Newsreader", serif; font-size: 1.4rem; color: #1A202C; font-weight: 700;'>Write your thoughts here</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -409,7 +424,6 @@ if navigation == "Dashboard":
             }
             st.rerun()
 
-    # Dynamic Results Display (Shows whenever an analysis has taken place)
     if "last_analyzed" in st.session_state:
         res = st.session_state["last_analyzed"]
         curr_emotion = res["emotion"]
@@ -422,13 +436,13 @@ if navigation == "Dashboard":
             st.markdown(f"""
             <div class='ui-card'>
                 <div style='display: flex; justify-content: space-between; align-items: center;'>
-                    <span style='font-size: 0.72rem; color: #A0AEC0; font-weight: 700; letter-spacing: 0.08em;'>DETECTED EMOTION</span>
+                    <span style='font-size: 0.72rem; color: #4A5568; font-weight: 800; letter-spacing: 0.08em;'>DETECTED EMOTION</span>
                     <span class='pill-badge badge-{curr_emotion.lower()}'>• {curr_emotion.upper()}</span>
                 </div>
-                <div style='font-family: "Newsreader", serif; font-size: 2.8rem; color: #1A202C; margin: 8px 0 4px 0;'>{curr_emotion}</div>
-                <p style='color: #718096; font-size: 0.88rem; line-height: 1.5;'>{res_data['subtext']}</p>
-                <hr style='border: none; border-top: 1px solid #F0EFEA; margin: 15px 0;'>
-                <div style='display: flex; gap: 15px; font-size: 0.75rem; color: #A0AEC0;'>
+                <div style='font-family: "Newsreader", serif; font-size: 2.8rem; color: #1A202C; font-weight: 700; margin: 8px 0 4px 0;'>{curr_emotion}</div>
+                <p style='color: #2D3748; font-size: 0.9rem; line-height: 1.5; font-weight: 500;'>{res_data['subtext']}</p>
+                <hr style='border: none; border-top: 1px solid #D8D4C5; margin: 15px 0;'>
+                <div style='display: flex; gap: 15px; font-size: 0.75rem; color: #4A5568; font-weight: 700;'>
                     <span>🕒 {datetime.datetime.now().strftime("%H:%M")}</span>
                     <span>✍️ {word_count} words analyzed</span>
                 </div>
@@ -439,12 +453,12 @@ if navigation == "Dashboard":
             st.markdown(f"""
             <div class='ui-card'>
                 <div style='display: flex; justify-content: space-between; align-items: center;'>
-                    <span style='font-size: 0.72rem; color: #A0AEC0; font-weight: 700; letter-spacing: 0.08em;'>CONFIDENCE SCORE</span>
+                    <span style='font-size: 0.72rem; color: #4A5568; font-weight: 800; letter-spacing: 0.08em;'>CONFIDENCE SCORE</span>
                     <span style='font-size: 0.72rem; background: {res_data["badge_bg"]}; color: {res_data["badge_text"]}; padding: 4px 10px; border-radius: 12px; font-weight: 700;'>AI ANALYSIS</span>
                 </div>
-                <div style='font-family: "Newsreader", serif; font-size: 2.8rem; color: #1A202C; margin: 8px 0 4px 0;'>{curr_conf * 100:.2f}%</div>
+                <div style='font-family: "Newsreader", serif; font-size: 2.8rem; color: #1A202C; font-weight: 700; margin: 8px 0 4px 0;'>{curr_conf * 100:.2f}%</div>
                 
-                <div style='background-color: #E2E0D8; border-radius: 10px; height: 6px; width: 100%; margin: 15px 0;'>
+                <div style='background-color: #CBD5E0; border-radius: 10px; height: 6px; width: 100%; margin: 15px 0;'>
                     <div style='background-color: {res_data["primary"]}; width: {curr_conf * 100}%; height: 100%; border-radius: 10px;'></div>
                 </div>
             </div>
@@ -454,8 +468,8 @@ if navigation == "Dashboard":
         with col_rs1:
             st.markdown(f"""
             <div class='ui-card' style='background: {res_data["accent_bg"]} !important;'>
-                <div style='font-size: 0.72rem; color: {res_data["primary"]}; font-weight: 700; letter-spacing: 0.08em; margin-bottom: 8px;'>✨ A THOUGHT FOR YOU</div>
-                <div style='font-family: "Newsreader", serif; font-size: 1.25rem; color: #1A202C; line-height: 1.5; font-style: italic;'>
+                <div style='font-size: 0.72rem; color: {res_data["primary"]}; font-weight: 800; letter-spacing: 0.08em; margin-bottom: 8px;'>✨ A THOUGHT FOR YOU</div>
+                <div style='font-family: "Newsreader", serif; font-size: 1.25rem; color: #1A202C; font-weight: 600; line-height: 1.5; font-style: italic;'>
                     "{res_data['quote']}"
                 </div>
             </div>
@@ -464,10 +478,10 @@ if navigation == "Dashboard":
         with col_rs2:
             st.markdown(f"""
             <div class='ui-card'>
-                <div style='font-size: 0.72rem; color: #718096; font-weight: 700; letter-spacing: 0.08em; margin-bottom: 6px;'>🎵 MUSIC RECOMMENDATION</div>
-                <div style='font-family: "Newsreader", serif; font-size: 1.3rem; color: #1A202C;'>{res_data['music_title']}</div>
-                <div style='font-size: 0.8rem; color: #718096;'>{res_data['music_artist']}</div>
-                <p style='font-size: 0.8rem; color: #A0AEC0; margin-top: 6px;'>{res_data['music_sub']}</p>
+                <div style='font-size: 0.72rem; color: #4A5568; font-weight: 800; letter-spacing: 0.08em; margin-bottom: 6px;'>🎵 MUSIC RECOMMENDATION</div>
+                <div style='font-family: "Newsreader", serif; font-size: 1.3rem; color: #1A202C; font-weight: 700;'>{res_data['music_title']}</div>
+                <div style='font-size: 0.8rem; color: #4A5568; font-weight: 600;'>{res_data['music_artist']}</div>
+                <p style='font-size: 0.8rem; color: #2D3748; margin-top: 6px;'>{res_data['music_sub']}</p>
                 <div style='margin-top: 15px;'>
                     <a href='{res_data['music_url']}' target='_blank' style='text-decoration: none;'>
                         <button style='background: {res_data["primary"]}; color: white; border: none; padding: 8px 18px; border-radius: 20px; font-weight: 600; font-size: 0.82rem; cursor: pointer;'>🎧 Open in Spotify</button>
@@ -486,28 +500,27 @@ elif navigation == "Mood Tracking":
 
     df = get_all_entries()
 
-    # Dynamic Metric Tiles
     col_m1, col_m2, col_m3 = st.columns(3)
     with col_m1:
         st.markdown(f"""
         <div class='ui-card-sm'>
-            <div style='font-size: 0.72rem; color: #A0AEC0; font-weight: 700; letter-spacing: 0.08em;'>TOTAL ENTRIES</div>
-            <div style='font-family: "Newsreader", serif; font-size: 2.2rem; color: #1A202C; margin-top: 4px;'>{len(df)}</div>
+            <div style='font-size: 0.72rem; color: #4A5568; font-weight: 800; letter-spacing: 0.08em;'>TOTAL ENTRIES</div>
+            <div style='font-family: "Newsreader", serif; font-size: 2.2rem; color: #1A202C; font-weight: 700; margin-top: 4px;'>{len(df)}</div>
         </div>
         """, unsafe_allow_html=True)
     with col_m2:
         most_freq = df['emotion'].mode()[0] if not df.empty else "N/A"
         st.markdown(f"""
         <div class='ui-card-sm'>
-            <div style='font-size: 0.72rem; color: #A0AEC0; font-weight: 700; letter-spacing: 0.08em;'>MOST FREQUENT</div>
-            <div style='font-family: "Newsreader", serif; font-size: 2.2rem; color: {theme["primary"]}; margin-top: 4px;'>{most_freq}</div>
+            <div style='font-size: 0.72rem; color: #4A5568; font-weight: 800; letter-spacing: 0.08em;'>MOST FREQUENT</div>
+            <div style='font-family: "Newsreader", serif; font-size: 2.2rem; color: {theme["primary"]}; font-weight: 700; margin-top: 4px;'>{most_freq}</div>
         </div>
         """, unsafe_allow_html=True)
     with col_m3:
         st.markdown("""
         <div class='ui-card-sm'>
-            <div style='font-size: 0.72rem; color: #A0AEC0; font-weight: 700; letter-spacing: 0.08em;'>CONSENT COVERAGE</div>
-            <div style='font-family: "Newsreader", serif; font-size: 2.2rem; color: #1E3A2B; margin-top: 4px;'>100%</div>
+            <div style='font-size: 0.72rem; color: #4A5568; font-weight: 800; letter-spacing: 0.08em;'>CONSENT COVERAGE</div>
+            <div style='font-family: "Newsreader", serif; font-size: 2.2rem; color: #1E3A2B; font-weight: 700; margin-top: 4px;'>100%</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -530,8 +543,8 @@ elif navigation == "Mood Tracking":
                 height=280,
                 paper_bgcolor='rgba(0,0,0,0)',
                 plot_bgcolor='rgba(0,0,0,0)',
-                xaxis=dict(showgrid=False),
-                yaxis=dict(showgrid=True, gridcolor='#F0EFEA'),
+                xaxis=dict(showgrid=False, tickfont=dict(color="#1A202C", weight="bold")),
+                yaxis=dict(showgrid=True, gridcolor='#D8D4C5', tickfont=dict(color="#1A202C")),
                 margin=dict(l=10, r=10, t=20, b=10)
             )
             st.plotly_chart(fig, use_container_width=True)
@@ -541,7 +554,7 @@ elif navigation == "Mood Tracking":
 
     with col_hist:
         st.markdown("<div class='ui-card'>", unsafe_allow_html=True)
-        st.markdown("### Journal History")
+        st.markdown("<h3>Journal History</h3>", unsafe_allow_html=True)
         
         if not df.empty:
             for idx, row in df.head(5).iterrows():
@@ -549,10 +562,10 @@ elif navigation == "Mood Tracking":
                 st.markdown(f"""
                 <div class='history-row'>
                     <div style='display: flex; justify-content: space-between; align-items: center;'>
-                        <span style='font-size: 0.72rem; color: #A0AEC0;'>{row['timestamp']}</span>
+                        <span style='font-size: 0.72rem; color: #4A5568; font-weight: 700;'>{row['timestamp']}</span>
                         <span class='pill-badge {badge_cls}'>• {row['emotion']}</span>
                     </div>
-                    <div style='font-size: 0.85rem; color: #2D3748; margin-top: 6px;'>{row['text'][:60]}...</div>
+                    <div style='font-size: 0.85rem; color: #1A202C; font-weight: 500; margin-top: 6px;'>{row['text'][:60]}...</div>
                 </div>
                 """, unsafe_allow_html=True)
         else:
