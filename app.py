@@ -106,12 +106,10 @@ def get_ai_emotion(text):
     return "Calm", 0.94
 
 # ============================================================
-# MULTI-EMOTION THEMING & RESOURCE MAP
+# EMOTION ACCENT PROFILES
 # ============================================================
 EMOTION_THEMES = {
     "Calm": {
-        "bg_color": "#F4F6F4",
-        "sidebar_bg": "#EBF2EC",
         "primary_color": "#2D5A39",
         "accent_light": "#E2F0E5",
         "quote": "There is strength in slowing down. Take a breath and enjoy the quiet moment.",
@@ -120,8 +118,6 @@ EMOTION_THEMES = {
         "music_url": "https://open.spotify.com/playlist/37i9dQZF1DX4WYAV23eA21"
     },
     "Joyful": {
-        "bg_color": "#FFFDF5",
-        "sidebar_bg": "#FCF6E5",
         "primary_color": "#B06000",
         "accent_light": "#FEF7E0",
         "quote": "Joy is not in things; it is in us. Savor this light and pass it forward.",
@@ -130,8 +126,6 @@ EMOTION_THEMES = {
         "music_url": "https://open.spotify.com/playlist/37i9dQZF1DX3RXM23ip39B"
     },
     "Anxious": {
-        "bg_color": "#F4F7FB",
-        "sidebar_bg": "#E8F0FE",
         "primary_color": "#1A56B0",
         "accent_light": "#DCE6F8",
         "quote": "You don't have to control your thoughts. You just have to stop letting them control you.",
@@ -140,8 +134,6 @@ EMOTION_THEMES = {
         "music_url": "https://open.spotify.com/playlist/37i9dQZF1DX7EFK923aO3v"
     },
     "Sad": {
-        "bg_color": "#F7F5F9",
-        "sidebar_bg": "#EFEBF5",
         "primary_color": "#5B3A82",
         "accent_light": "#E6DEF0",
         "quote": "Tears are words that need to be written. Give yourself gentle grace today.",
@@ -150,8 +142,6 @@ EMOTION_THEMES = {
         "music_url": "https://open.spotify.com/playlist/37i9dQZF1DX3qCxC1vA23b"
     },
     "Angry": {
-        "bg_color": "#FAF4F4",
-        "sidebar_bg": "#F8E8E8",
         "primary_color": "#9E2A2B",
         "accent_light": "#FCD8D8",
         "quote": "Pause before responding. Let the storm pass through without steering your ship.",
@@ -161,7 +151,6 @@ EMOTION_THEMES = {
     }
 }
 
-# Determine Current Theme
 current_emotion = "Calm"
 if "last_analyzed" in st.session_state:
     current_emotion = st.session_state["last_analyzed"]["emotion"]
@@ -169,33 +158,31 @@ if "last_analyzed" in st.session_state:
 theme = EMOTION_THEMES.get(current_emotion, EMOTION_THEMES["Calm"])
 
 # ============================================================
-# CUSTOM CSS INJECTION FOR DYNAMIC THEMING
+# HIGH-CONTRAST CSS STYLING
 # ============================================================
 st.markdown(f"""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
+    /* Guaranteed High Contrast Global Text & Background */
     html, body, [class*="css"] {{
         font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: {theme['bg_color']} !important;
-        color: #2D3748;
+        color: #212529 !important;
     }}
 
     .stApp {{
-        background-color: {theme['bg_color']} !important;
-        transition: background-color 0.5s ease;
+        background-color: #F4F6F4 !important;
     }}
 
     [data-testid="stSidebar"] {{
-        background-color: {theme['sidebar_bg']} !important;
-        border-right: 1px solid rgba(0,0,0,0.05);
+        background-color: #EBF2EC !important;
+        border-right: 1px solid #D5E3D7;
         padding-top: 1rem;
     }}
 
-    h1, h2, h3, .serif-header {{
+    h1, h2, h3, h4, h5, h6 {{
         font-family: 'DM Serif Display', serif !important;
-        color: #1A3022 !important;
-        font-weight: 400 !important;
+        color: #111827 !important;
     }}
 
     h1 {{
@@ -203,39 +190,42 @@ st.markdown(f"""
         margin-bottom: 0.5rem !important;
     }}
 
+    /* Crisp White Cards with Dark Text */
     .custom-card {{
-        background-color: #FFFFFF;
+        background-color: #FFFFFF !important;
         border-radius: 16px;
         padding: 24px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         border: 1px solid #E2E8F0;
         margin-bottom: 20px;
+        color: #212529 !important;
     }}
 
     .metric-card {{
-        background-color: #FFFFFF;
+        background-color: #FFFFFF !important;
         border-radius: 14px;
         padding: 20px;
         text-align: center;
         border: 1px solid #E2E8F0;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
     }}
 
     .metric-value {{
         font-family: 'DM Serif Display', serif;
         font-size: 1.8rem;
-        color: {theme['primary_color']};
+        color: {theme['primary_color']} !important;
         margin-top: 4px;
     }}
 
     .metric-label {{
         font-size: 0.82rem;
-        color: #718096;
+        color: #4A5568 !important;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        font-weight: 600;
+        font-weight: 700;
     }}
 
+    /* High Visibility Buttons */
     .stButton>button {{
         background-color: {theme['primary_color']} !important;
         color: #FFFFFF !important;
@@ -243,7 +233,6 @@ st.markdown(f"""
         padding: 10px 28px !important;
         font-weight: 600 !important;
         border: none !important;
-        transition: all 0.2s ease !important;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
         width: auto !important;
         margin: 0 auto !important;
@@ -252,25 +241,21 @@ st.markdown(f"""
 
     .stTextArea textarea {{
         border-radius: 12px !important;
-        border: 1px solid #E2E8F0 !important;
-        background-color: #FAFAFA !important;
+        border: 1px solid #CBD5E0 !important;
+        background-color: #FFFFFF !important;
+        color: #111827 !important;
         font-size: 0.95rem !important;
-    }}
-    
-    .stTextArea textarea:focus {{
-        border-color: {theme['primary_color']} !important;
-        box-shadow: 0 0 0 1px {theme['primary_color']} !important;
     }}
 
     .quote-box {{
-        background-color: {theme['accent_light']};
+        background-color: {theme['accent_light']} !important;
         border-radius: 16px;
         padding: 24px;
         border-left: 4px solid {theme['primary_color']};
     }}
 
     .quote-title {{
-        color: {theme['primary_color']};
+        color: {theme['primary_color']} !important;
         font-weight: 700;
         font-size: 0.8rem;
         letter-spacing: 0.08em;
@@ -280,17 +265,17 @@ st.markdown(f"""
     .quote-text {{
         font-family: 'DM Serif Display', serif;
         font-size: 1.25rem;
-        color: #1A3022;
+        color: #111827 !important;
         font-style: italic;
         line-height: 1.4;
     }}
 
     .history-item {{
-        background-color: #FFFFFF;
+        background-color: #FFFFFF !important;
         border-radius: 12px;
         padding: 14px 18px;
         margin-bottom: 10px;
-        border: 1px solid #EDF2F7;
+        border: 1px solid #E2E8F0;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -321,12 +306,11 @@ with st.sidebar:
     st.markdown(f"**• Reflective {current_emotion}**")
 
 # ============================================================
-# PAGE 1: DASHBOARD (MAIN JOURNAL & REFLECTION)
+# PAGE 1: DASHBOARD
 # ============================================================
 if navigation == "Dashboard":
     st.title("Emotion Journal")
     
-    # Input Card
     st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
     st.markdown("### ✍️ Write your thoughts here:")
     journal_text = st.text_area(
@@ -350,7 +334,6 @@ if navigation == "Dashboard":
     
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # Process Input
     if analyze_btn:
         if journal_text.strip() == "":
             st.warning("Please write some text before analyzing.")
@@ -364,7 +347,6 @@ if navigation == "Dashboard":
             }
             st.rerun()
 
-    # Results Display
     if "last_analyzed" in st.session_state:
         res = st.session_state["last_analyzed"]
         curr_emotion = res["emotion"]
@@ -379,7 +361,7 @@ if navigation == "Dashboard":
             <div class='metric-card'>
                 <div class='metric-label'>DETECTED EMOTION</div>
                 <div class='metric-value'>{curr_emotion}</div>
-                <p style='color: #718096; font-size: 0.85rem; margin-top: 6px;'>{res_data['subtext']}</p>
+                <p style='color: #4A5568; font-size: 0.85rem; margin-top: 6px;'>{res_data['subtext']}</p>
             </div>
             """, unsafe_allow_html=True)
             
@@ -410,7 +392,7 @@ if navigation == "Dashboard":
             <div class='custom-card' style='height: 100%; margin-bottom: 0;'>
                 <div class='quote-title'>🎵 MUSIC RECOMMENDATION</div>
                 <h4 style='margin-top: 4px; font-family: "DM Serif Display", serif;'>"{res_data['music']}"</h4>
-                <p style='color: #718096; font-size: 0.85rem;'>Listen to soundscapes curated specifically for your emotional state.</p>
+                <p style='color: #4A5568; font-size: 0.85rem;'>Listen to soundscapes curated specifically for your emotional state.</p>
                 <a href='{res_data['music_url']}' target='_blank' style='text-decoration: none;'>
                     <button style='background-color: {res_data['accent_light']}; color: {res_data['primary_color']}; border: none; padding: 8px 18px; border-radius: 20px; font-weight: 600; cursor: pointer;'>🎧 Open in Spotify</button>
                 </a>
@@ -418,7 +400,7 @@ if navigation == "Dashboard":
             """, unsafe_allow_html=True)
 
 # ============================================================
-# PAGE 2: MOOD TRACKING (ANALYTICS & HISTORY)
+# PAGE 2: MOOD TRACKING
 # ============================================================
 elif navigation == "Mood Tracking":
     st.title("📈 Mood Tracking")
@@ -466,7 +448,7 @@ elif navigation == "Mood Tracking":
         fig.update_layout(
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(family="Plus Jakarta Sans"),
+            font=dict(family="Plus Jakarta Sans", color="#212529"),
             margin=dict(l=20, r=20, t=20, b=20)
         )
         st.plotly_chart(fig, use_container_width=True)
@@ -478,8 +460,8 @@ elif navigation == "Mood Tracking":
             st.markdown(f"""
             <div class='history-item'>
                 <div>
-                    <span style='font-size: 0.8rem; color: #A0AEC0; font-weight: 600;'>{row['timestamp']}</span>
-                    <p style='margin: 4px 0 0 0; color: #2D3748;'>{row['text']}</p>
+                    <span style='font-size: 0.8rem; color: #718096; font-weight: 600;'>{row['timestamp']}</span>
+                    <p style='margin: 4px 0 0 0; color: #212529;'>{row['text']}</p>
                 </div>
                 <div>
                     <span class='{badge_class}'>{row['emotion']}</span>
