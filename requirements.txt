@@ -4,3 +4,4 @@ torch
 huggingface-hub
 pandas
 plotly
+requests
