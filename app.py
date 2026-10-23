@@ -106,12 +106,12 @@ def get_ai_emotion(text):
     return "Calm", 0.94
 
 # ============================================================
-# EMOTION ACCENT PROFILES
+# EMOTION PROFILES & THEMES
 # ============================================================
 EMOTION_THEMES = {
     "Calm": {
         "primary_color": "#2D5A39",
-        "accent_light": "#E2F0E5",
+        "accent_light": "#E9F5EC",
         "quote": "There is strength in slowing down. Take a breath and enjoy the quiet moment.",
         "subtext": "Your choice of words reflects a serene and balanced state of mind.",
         "music": "Ambient Forest Echoes",
@@ -127,7 +127,7 @@ EMOTION_THEMES = {
     },
     "Anxious": {
         "primary_color": "#1A56B0",
-        "accent_light": "#DCE6F8",
+        "accent_light": "#E8F0FE",
         "quote": "You don't have to control your thoughts. You just have to stop letting them control you.",
         "subtext": "Take a gentle pause. Let us ground your mind with relaxing soundscapes.",
         "music": "Deep Breathing & Calming Piano",
@@ -135,7 +135,7 @@ EMOTION_THEMES = {
     },
     "Sad": {
         "primary_color": "#5B3A82",
-        "accent_light": "#E6DEF0",
+        "accent_light": "#F3EEF9",
         "quote": "Tears are words that need to be written. Give yourself gentle grace today.",
         "subtext": "It is completely okay to feel this way. Honor your emotions gently.",
         "music": "Warm Ambient Comfort",
@@ -143,7 +143,7 @@ EMOTION_THEMES = {
     },
     "Angry": {
         "primary_color": "#9E2A2B",
-        "accent_light": "#FCD8D8",
+        "accent_light": "#FDF2F2",
         "quote": "Pause before responding. Let the storm pass through without steering your ship.",
         "subtext": "Acknowledge the tension, take a deep breath, and allow yourself to cool down.",
         "music": "Grounding Nature Waves",
@@ -158,134 +158,159 @@ if "last_analyzed" in st.session_state:
 theme = EMOTION_THEMES.get(current_emotion, EMOTION_THEMES["Calm"])
 
 # ============================================================
-# HIGH-CONTRAST CSS STYLING
+# PREMIUM MODERN CSS STYLING
 # ============================================================
 st.markdown(f"""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
-    /* Guaranteed High Contrast Global Text & Background */
     html, body, [class*="css"] {{
         font-family: 'Plus Jakarta Sans', sans-serif;
-        color: #212529 !important;
+        color: #1A202C !important;
     }}
 
     .stApp {{
-        background-color: #F4F6F4 !important;
+        background-color: #F8FAF9 !important;
     }}
 
+    /* Top Navigation Header Banner */
+    .top-header-banner {{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #FFFFFF;
+        padding: 12px 24px;
+        border-radius: 14px;
+        border: 1px solid #E2E8F0;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }}
+
+    /* Sidebar Styling */
     [data-testid="stSidebar"] {{
-        background-color: #EBF2EC !important;
-        border-right: 1px solid #D5E3D7;
+        background-color: #F1F5F2 !important;
+        border-right: 1px solid #E2E8F0;
         padding-top: 1rem;
     }}
 
-    h1, h2, h3, h4, h5, h6 {{
+    h1, h2, h3, h4 {{
         font-family: 'DM Serif Display', serif !important;
-        color: #111827 !important;
+        color: #0F172A !important;
+        letter-spacing: -0.01em;
     }}
 
     h1 {{
-        font-size: 2.3rem !important;
-        margin-bottom: 0.5rem !important;
+        font-size: 2.2rem !important;
+        margin-bottom: 0.2rem !important;
     }}
 
-    /* Crisp White Cards with Dark Text */
+    /* Premium SaaS Card Containers */
     .custom-card {{
-        background-color: #FFFFFF !important;
-        border-radius: 16px;
-        padding: 24px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        background: #FFFFFF !important;
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
         border: 1px solid #E2E8F0;
-        margin-bottom: 20px;
-        color: #212529 !important;
+        margin-bottom: 24px;
     }}
 
     .metric-card {{
-        background-color: #FFFFFF !important;
-        border-radius: 14px;
-        padding: 20px;
+        background: #FFFFFF !important;
+        border-radius: 16px;
+        padding: 24px;
         text-align: center;
         border: 1px solid #E2E8F0;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     }}
 
     .metric-value {{
         font-family: 'DM Serif Display', serif;
-        font-size: 1.8rem;
+        font-size: 2rem;
         color: {theme['primary_color']} !important;
-        margin-top: 4px;
+        margin-top: 6px;
     }}
 
     .metric-label {{
-        font-size: 0.82rem;
-        color: #4A5568 !important;
+        font-size: 0.78rem;
+        color: #64748B !important;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.08em;
         font-weight: 700;
     }}
 
-    /* High Visibility Buttons */
+    /* Pill Button Styling */
     .stButton>button {{
-        background-color: {theme['primary_color']} !important;
+        background: {theme['primary_color']} !important;
         color: #FFFFFF !important;
-        border-radius: 30px !important;
-        padding: 10px 28px !important;
+        border-radius: 50px !important;
+        padding: 12px 32px !important;
         font-weight: 600 !important;
+        font-size: 0.95rem !important;
         border: none !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-        width: auto !important;
-        margin: 0 auto !important;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.12) !important;
+        transition: all 0.2s ease;
         display: block !important;
+        margin: 0 auto !important;
+    }}
+
+    .stButton>button:hover {{
+        opacity: 0.92;
+        transform: translateY(-1px);
     }}
 
     .stTextArea textarea {{
-        border-radius: 12px !important;
-        border: 1px solid #CBD5E0 !important;
-        background-color: #FFFFFF !important;
-        color: #111827 !important;
-        font-size: 0.95rem !important;
+        border-radius: 14px !important;
+        border: 1px solid #CBD5E1 !important;
+        background-color: #FAFAFA !important;
+        color: #0F172A !important;
+        font-size: 1rem !important;
+        padding: 14px !important;
     }}
 
+    /* Quote Banner */
     .quote-box {{
-        background-color: {theme['accent_light']} !important;
-        border-radius: 16px;
-        padding: 24px;
-        border-left: 4px solid {theme['primary_color']};
+        background: {theme['accent_light']} !important;
+        border-radius: 18px;
+        padding: 28px;
+        border-left: 5px solid {theme['primary_color']};
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
     }}
 
     .quote-title {{
         color: {theme['primary_color']} !important;
         font-weight: 700;
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
-        margin-bottom: 8px;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        margin-bottom: 10px;
+        text-transform: uppercase;
     }}
 
     .quote-text {{
         font-family: 'DM Serif Display', serif;
-        font-size: 1.25rem;
-        color: #111827 !important;
+        font-size: 1.3rem;
+        color: #0F172A !important;
         font-style: italic;
-        line-height: 1.4;
+        line-height: 1.5;
     }}
 
     .history-item {{
-        background-color: #FFFFFF !important;
-        border-radius: 12px;
-        padding: 14px 18px;
-        margin-bottom: 10px;
+        background: #FFFFFF !important;
+        border-radius: 14px;
+        padding: 18px 22px;
+        margin-bottom: 12px;
         border: 1px solid #E2E8F0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.01);
         display: flex;
         align-items: center;
         justify-content: space-between;
     }}
 
-    .badge-calm {{ background-color: #E6F4EA; color: #137333; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.8rem; }}
-    .badge-joyful {{ background-color: #FEF7E0; color: #B06000; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.8rem; }}
-    .badge-anxious {{ background-color: #DCE6F8; color: #1A56B0; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.8rem; }}
-    .badge-sad {{ background-color: #E6DEF0; color: #5B3A82; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.8rem; }}
-    .badge-angry {{ background-color: #FCD8D8; color: #9E2A2B; padding: 4px 12px; border-radius: 12px; font-weight: 600; font-size: 0.8rem; }}
+    /* Tags */
+    .badge-calm {{ background: #E6F4EA; color: #137333; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }}
+    .badge-joyful {{ background: #FEF7E0; color: #B06000; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }}
+    .badge-anxious {{ background: #E8F0FE; color: #1A56B0; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }}
+    .badge-sad {{ background: #F3EEF9; color: #5B3A82; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }}
+    .badge-angry {{ background: #FDF2F2; color: #9E2A2B; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -293,30 +318,48 @@ st.markdown(f"""
 # SIDEBAR NAVIGATION
 # ============================================================
 with st.sidebar:
-    st.markdown("<h2 style='font-size: 1.5rem; margin-bottom: 20px;'>🌿 Emotion Journal</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='font-size: 1.4rem; margin-bottom: 15px; color: #1E293B;'>🌿 Emotion Journal</h2>", unsafe_allow_html=True)
     
     navigation = st.radio(
         "NAVIGATION",
         ["Dashboard", "Mood Tracking", "Gentle Recall", "Psychologist Portal"],
-        index=0
+        index=0,
+        label_visibility="collapsed"
     )
     
-    st.markdown("---")
-    st.caption("Current Mood Space")
-    st.markdown(f"**• Reflective {current_emotion}**")
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.caption("ACTIVE MOOD SPACE")
+    st.markdown(f"<div style='font-weight: 600; color: {theme['primary_color']}; font-size: 0.95rem; margin-top: 4px;'>• Reflective {current_emotion}</div>", unsafe_allow_html=True)
+
+# ============================================================
+# TOP HEADER BAR (Like Professional Reference UI)
+# ============================================================
+st.markdown(f"""
+<div class='top-header-banner'>
+    <div style='display: flex; align-items: center; gap: 10px;'>
+        <span style='font-size: 1.2rem;'>🌿</span>
+        <span style='font-weight: 700; color: #0F172A; font-size: 0.95rem;'>Emotion Journal System</span>
+    </div>
+    <div style='background: {theme['accent_light']}; color: {theme['primary_color']}; padding: 6px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 700;'>
+        Current Mood: {current_emotion}
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # ============================================================
 # PAGE 1: DASHBOARD
 # ============================================================
 if navigation == "Dashboard":
     st.title("Emotion Journal")
+    st.caption("Capture your thoughts and experience real-time AI emotional reflection.")
+    st.markdown("<br>", unsafe_allow_html=True)
     
     st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
     st.markdown("### ✍️ Write your thoughts here:")
     journal_text = st.text_area(
         "",
         placeholder="Start writing about your day, your thoughts, or how you feel...",
-        height=140,
+        height=150,
         label_visibility="collapsed"
     )
     
@@ -361,7 +404,7 @@ if navigation == "Dashboard":
             <div class='metric-card'>
                 <div class='metric-label'>DETECTED EMOTION</div>
                 <div class='metric-value'>{curr_emotion}</div>
-                <p style='color: #4A5568; font-size: 0.85rem; margin-top: 6px;'>{res_data['subtext']}</p>
+                <p style='color: #64748B; font-size: 0.85rem; margin-top: 8px;'>{res_data['subtext']}</p>
             </div>
             """, unsafe_allow_html=True)
             
@@ -370,13 +413,13 @@ if navigation == "Dashboard":
             <div class='metric-card'>
                 <div class='metric-label'>CONFIDENCE SCORE</div>
                 <div class='metric-value'>{curr_conf * 100:.2f}%</div>
-                <div style='background-color: #E2E8F0; border-radius: 10px; height: 6px; width: 80%; margin: 10px auto 0 auto;'>
+                <div style='background-color: #E2E8F0; border-radius: 10px; height: 6px; width: 85%; margin: 14px auto 0 auto;'>
                     <div style='background-color: {res_data['primary_color']}; width: {curr_conf * 100}%; height: 100%; border-radius: 10px;'></div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
 
-        st.markdown("<h3 style='margin-top: 30px;'>Resources for your Spirit</h3>", unsafe_allow_html=True)
+        st.markdown("<h3 style='margin-top: 40px; margin-bottom: 20px;'>Resources for your Spirit</h3>", unsafe_allow_html=True)
         
         col_r1, col_r2 = st.columns(2)
         with col_r1:
@@ -391,11 +434,13 @@ if navigation == "Dashboard":
             st.markdown(f"""
             <div class='custom-card' style='height: 100%; margin-bottom: 0;'>
                 <div class='quote-title'>🎵 MUSIC RECOMMENDATION</div>
-                <h4 style='margin-top: 4px; font-family: "DM Serif Display", serif;'>"{res_data['music']}"</h4>
-                <p style='color: #4A5568; font-size: 0.85rem;'>Listen to soundscapes curated specifically for your emotional state.</p>
-                <a href='{res_data['music_url']}' target='_blank' style='text-decoration: none;'>
-                    <button style='background-color: {res_data['accent_light']}; color: {res_data['primary_color']}; border: none; padding: 8px 18px; border-radius: 20px; font-weight: 600; cursor: pointer;'>🎧 Open in Spotify</button>
-                </a>
+                <h4 style='margin-top: 6px; font-family: "DM Serif Display", serif;'>"{res_data['music']}"</h4>
+                <p style='color: #64748B; font-size: 0.85rem; margin-top: 6px;'>Curated audio soundscapes tailored for your emotional state.</p>
+                <div style='margin-top: 20px;'>
+                    <a href='{res_data['music_url']}' target='_blank' style='text-decoration: none;'>
+                        <button style='background: {res_data['accent_light']}; color: {res_data['primary_color']}; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 0.85rem;'>🎧 Open in Spotify</button>
+                    </a>
+                </div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -404,7 +449,8 @@ if navigation == "Dashboard":
 # ============================================================
 elif navigation == "Mood Tracking":
     st.title("📈 Mood Tracking")
-    st.caption("Detailed analysis of your mood variations and journal history.")
+    st.caption("Detailed longitudinal analytics of your emotional well-being.")
+    st.markdown("<br>", unsafe_allow_html=True)
 
     df = get_all_entries()
 
@@ -448,20 +494,20 @@ elif navigation == "Mood Tracking":
         fig.update_layout(
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(family="Plus Jakarta Sans", color="#212529"),
+            font=dict(family="Plus Jakarta Sans", color="#1A202C"),
             margin=dict(l=20, r=20, t=20, b=20)
         )
         st.plotly_chart(fig, use_container_width=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
-        st.markdown("### Scannable History")
+        st.markdown("<h3 style='margin-top: 30px; margin-bottom: 15px;'>Scannable History</h3>", unsafe_allow_html=True)
         for idx, row in df.iterrows():
             badge_class = f"badge-{row['emotion'].lower()}"
             st.markdown(f"""
             <div class='history-item'>
                 <div>
-                    <span style='font-size: 0.8rem; color: #718096; font-weight: 600;'>{row['timestamp']}</span>
-                    <p style='margin: 4px 0 0 0; color: #212529;'>{row['text']}</p>
+                    <span style='font-size: 0.78rem; color: #64748B; font-weight: 700;'>{row['timestamp']}</span>
+                    <p style='margin: 4px 0 0 0; color: #1E293B; font-size: 0.95rem;'>{row['text']}</p>
                 </div>
                 <div>
                     <span class='{badge_class}'>{row['emotion']}</span>
@@ -477,6 +523,7 @@ elif navigation == "Mood Tracking":
 elif navigation == "Gentle Recall":
     st.title("📸 Gentle Memory Recall")
     st.caption("Anchor yourself with peaceful memories during stressful moments.")
+    st.markdown("<br>", unsafe_allow_html=True)
 
     st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Upload a comforting memory photo:", type=["jpg", "jpeg", "png"])
@@ -494,6 +541,7 @@ elif navigation == "Gentle Recall":
 elif navigation == "Psychologist Portal":
     st.title("🩺 Psychologist Clinical Portal")
     st.caption("Consent-governed patient observation panel.")
+    st.markdown("<br>", unsafe_allow_html=True)
 
     df = get_all_entries()
 
