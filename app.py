@@ -114,12 +114,20 @@ st.markdown("""
         padding: 16px !important;
     }
 
-    /* Info / Quote Box */
-    .stInfo {
-        background-color: #E9F5EC !important;
-        border-left: 4px solid #2D5A39 !important;
+    /* Fix Streamlit Info and Warning Text Visibility */
+    .stAlert, .stInfo, .stWarning {
         color: #1E293B !important;
+        background-color: #E9F5EC !important;
         border-radius: 12px !important;
+    }
+    
+    .stWarning {
+        background-color: #FEF3C7 !important;
+        color: #92400E !important;
+    }
+    
+    p, span, label, .streamlit-expanderHeader {
+        color: #1E293B !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -220,7 +228,6 @@ MODEL_NAME = "j-hartmann/emotion-english-distilroberta-base"
 def get_ai_emotion(text):
     token = os.environ.get("HF_TOKEN")
     
-    # 1. First, try free Hugging Face Serverless API
     if token:
         headers = {"Authorization": f"Bearer {token}"}
         API_URL = f"https://api-inference.huggingface.co/models/{MODEL_NAME}"
@@ -246,9 +253,8 @@ def get_ai_emotion(text):
                     }
                     return emotion_map.get(label, "Calm"), confidence, None
         except Exception:
-            pass # Fall through to rule-based classification if API is busy/throttled
+            pass
 
-    # 2. Rule-based Sentiment Fallback (Guarantees app NEVER fails during live demos)
     text_lower = text.lower()
     
     anxious_words = ["worried", "worry", "anxious", "stress", "stressed", "nervous", "panic", "scared", "fear", "exam", "test"]
@@ -470,9 +476,20 @@ elif app_mode == "📊 Mood Timeline & Analytics":
     else:
         st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
         st.subheader("📈 Emotion Frequency Distribution")
+        
+        # FIXED PLOTLY CHART: Explicit dark font colors for absolute visibility
         fig_counts = px.histogram(df, x="emotion", color="emotion", title="Entries per Emotion",
                                  color_discrete_map=EMOTION_COLORS)
-        fig_counts.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+        fig_counts.update_layout(
+            paper_bgcolor='rgba(0,0,0,0)', 
+            plot_bgcolor='rgba(0,0,0,0)',
+            font=dict(family="Plus Jakarta Sans", color="#1E293B", size=13),
+            title_font=dict(family="DM Serif Display", size=18, color="#0F172A"),
+            legend=dict(font=dict(color="#1E293B"))
+        )
+        fig_counts.update_xaxes(tickfont=dict(color="#1E293B", size=12))
+        fig_counts.update_yaxes(tickfont=dict(color="#1E293B", size=12))
+        
         st.plotly_chart(fig_counts, use_container_width=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -496,7 +513,7 @@ elif app_mode == "📸 Gentle Memory Recall":
     uploaded_photo = st.file_uploader("Upload a comforting photo or happy memory snapshot:", type=["png", "jpg", "jpeg"])
 
     if uploaded_photo is not None:
-        st.image(uploaded_photo, caption="Your Comforting Memory", use_column_width=True)
+        st.image(uploaded_photo, caption="Your Comforting Memory", use_container_width=True)
         st.success("Take a deep breath. You've navigated hard moments before, and you can get through this.")
     else:
         st.info("Upload an image from a happy day, vacation, or loved one to anchor yourself during stressful moments.")
