@@ -5,7 +5,7 @@ import random
 import pandas as pd
 import plotly.express as px
 from datetime import datetime
-from huggingface_hub import InferenceClient
+import requests
 
 
 # ============================================================
@@ -15,8 +15,114 @@ from huggingface_hub import InferenceClient
 st.set_page_config(
     page_title="Emotion Journal & Psychologist Portal",
     page_icon="🌿",
-    layout="centered"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
+
+
+# ============================================================
+# PROFESSIONAL SAAS & HIGH-CONTRAST CSS STYLING
+# ============================================================
+
+st.markdown("""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+    /* Global Typography & Background */
+    html, body, [class*="css"] {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        color: #1E293B !important;
+    }
+
+    .stApp {
+        background-color: #F8FAF9 !important;
+    }
+
+    /* Sidebar Styling - Crisp, Visible, High-Contrast */
+    [data-testid="stSidebar"] {
+        background-color: #EBF2EC !important;
+        border-right: 1px solid #D1E0D3 !important;
+        padding-top: 1.5rem;
+    }
+
+    [data-testid="stSidebar"] *, 
+    [data-testid="stSidebar"] span, 
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] div {
+        color: #1E293B !important;
+        font-weight: 600 !important;
+    }
+
+    /* Headers */
+    h1, h2, h3, h4 {
+        font-family: 'DM Serif Display', serif !important;
+        color: #0F172A !important;
+        font-weight: 400 !important;
+    }
+
+    h1 {
+        font-size: 2.3rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+
+    /* Modern Card Containers */
+    .custom-card {
+        background-color: #FFFFFF !important;
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        border: 1px solid #E2E8F0;
+        margin-bottom: 20px;
+    }
+
+    .metric-card {
+        background-color: #FFFFFF !important;
+        border-radius: 14px;
+        padding: 20px;
+        text-align: center;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Buttons */
+    .stButton>button {
+        background-color: #2D5A39 !important;
+        color: #FFFFFF !important;
+        border-radius: 30px !important;
+        padding: 10px 28px !important;
+        font-weight: 700 !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(45, 90, 57, 0.2) !important;
+        display: block !important;
+        margin: 0 auto !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .stButton>button:hover {
+        background-color: #23472D !important;
+        transform: translateY(-1px);
+    }
+
+    /* Text Area */
+    .stTextArea textarea {
+        border-radius: 14px !important;
+        border: 1px solid #CBD5E1 !important;
+        background-color: #FFFFFF !important;
+        color: #0F172A !important;
+        font-size: 1rem !important;
+        padding: 16px !important;
+    }
+
+    /* Info / Quote Box */
+    .stInfo {
+        background-color: #E9F5EC !important;
+        border-left: 4px solid #2D5A39 !important;
+        color: #1E293B !important;
+        border-radius: 12px !important;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 
 # ============================================================
@@ -106,13 +212,8 @@ create_database()
 
 
 # ============================================================
-# HUGGING FACE AI
-# ============================================================
-# ============================================================
 # HUGGING FACE AI (WITH FREE ENDPOINT & LOCAL FALLBACK)
 # ============================================================
-
-import requests
 
 MODEL_NAME = "j-hartmann/emotion-english-distilroberta-base"
 
@@ -169,8 +270,6 @@ def get_ai_emotion(text):
             return "Joyful", 0.92, None
 
     return "Calm", 0.80, None
-
-
 
 
 # ============================================================
@@ -260,16 +359,16 @@ setInterval(connectJournal, 500);
 
 
 # ============================================================
-# NAVIGATION SIDEBAR (SIX-STAGE PIPELINE & MODULES)
+# NAVIGATION SIDEBAR
 # ============================================================
 
-st.sidebar.title("🌿 Navigation")
+st.sidebar.markdown("<h2 style='font-size: 1.4rem; color: #0F172A; margin-bottom: 15px;'>🌿 Navigation</h2>", unsafe_allow_html=True)
 app_mode = st.sidebar.radio("Go to", [
     "✍️ Journal & Ambience", 
     "📊 Mood Timeline & Analytics", 
     "📸 Gentle Memory Recall",
     "🩺 Psychologist Portal & Consent"
-])
+], label_visibility="collapsed")
 
 
 # ============================================================
@@ -278,25 +377,27 @@ app_mode = st.sidebar.radio("Go to", [
 
 if app_mode == "✍️ Journal & Ambience":
     st.title("🌿 Emotion-Responsive Intelligent Journaling")
-    st.markdown("Write freely[cite: 8]. Your surroundings quietly respond to your emotions[cite: 8].")
+    st.markdown("Write freely. Your surroundings quietly respond to your emotions.")
+    st.markdown("<br>", unsafe_allow_html=True)
 
+    st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
     journal = st.text_area(
         "✍️ Write your thoughts here:",
-        height=250,
+        height=200,
         placeholder="Start writing about your day, your thoughts, or how you feel..."
     )
 
-    # Psychologist Sharing Consent Selector (Synopsis Objective 6)
-    st.markdown("---")
+    st.markdown("<br>", unsafe_allow_html=True)
     st.subheader("🔒 Psychologist Sharing Consent")
     consent_level = st.selectbox(
         "Choose sharing permission for this entry:",
         ["Full Access", "Brief Summary Only", "No Access"],
-        help="Controls what an authorized psychologist can view for this specific entry[cite: 10, 11]."
+        help="Controls what an authorized psychologist can view for this specific entry."
     )
 
-    st.write("")
-    analyze = st.button("🧠 ANALYZE EMOTION", use_container_width=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+    analyze = st.button("🧠 ANALYZE EMOTION")
+    st.markdown("</div>", unsafe_allow_html=True)
 
     if analyze:
         if journal.strip() == "":
@@ -324,18 +425,31 @@ if app_mode == "✍️ Journal & Ambience":
                 )
 
                 st.success("Emotion analysis completed and saved securely!")
+                st.markdown("<br>", unsafe_allow_html=True)
                 st.subheader("🤖 AI Emotion Analysis")
 
                 col1, col2 = st.columns(2)
                 with col1:
-                    st.metric("Detected Emotion", emotion)
+                    st.markdown(f"""
+                    <div class='metric-card'>
+                        <div style='font-size: 0.75rem; color: #64748B; font-weight: 700; text-transform: uppercase;'>DETECTED EMOTION</div>
+                        <div style='font-family: "DM Serif Display", serif; font-size: 2rem; color: #0F172A; margin-top: 5px;'>{emotion}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
                 with col2:
-                    st.metric("Confidence", f"{confidence * 100:.2f}%")
+                    st.markdown(f"""
+                    <div class='metric-card'>
+                        <div style='font-size: 0.75rem; color: #64748B; font-weight: 700; text-transform: uppercase;'>CONFIDENCE</div>
+                        <div style='font-family: "DM Serif Display", serif; font-size: 2rem; color: #0F172A; margin-top: 5px;'>{confidence * 100:.2f}%</div>
+                    </div>
+                    """, unsafe_allow_html=True)
 
+                st.markdown("<br>", unsafe_allow_html=True)
                 st.subheader("💬 A Thought for You")
                 quote = random.choice(QUOTES[emotion])
                 st.info(quote)
 
+                st.markdown("<br>", unsafe_allow_html=True)
                 st.subheader("🎵 Music Recommendation")
                 st.markdown(f"[🎧 Listen to music for a {emotion.lower()} mood]({MUSIC[emotion]})")
 
@@ -346,21 +460,27 @@ if app_mode == "✍️ Journal & Ambience":
 
 elif app_mode == "📊 Mood Timeline & Analytics":
     st.title("📊 Your Emotional Journey")
-    st.markdown("Track your emotional patterns over time[cite: 8, 10].")
+    st.markdown("Track your emotional patterns over time.")
+    st.markdown("<br>", unsafe_allow_html=True)
 
     df = load_mood_history()
 
     if df.empty:
         st.info("No journal entries found yet. Start writing in the Journal tab to build your timeline!")
     else:
+        st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
         st.subheader("📈 Emotion Frequency Distribution")
         fig_counts = px.histogram(df, x="emotion", color="emotion", title="Entries per Emotion",
-                                  color_discrete_map=EMOTION_COLORS)
+                                 color_discrete_map=EMOTION_COLORS)
+        fig_counts.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
         st.plotly_chart(fig_counts, use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
+        st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
         st.subheader("📜 Past Journal Entries & Permissions")
         display_df = df[["date_time", "emotion", "confidence", "consent_level", "journal"]].copy()
         st.dataframe(display_df, use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ============================================================
@@ -369,33 +489,37 @@ elif app_mode == "📊 Mood Timeline & Analytics":
 
 elif app_mode == "📸 Gentle Memory Recall":
     st.title("📸 Gentle Memory Recall")
-    st.markdown("When you feel overwhelmed or anxious, pause and reconnect with a comforting memory[cite: 8, 9].")
+    st.markdown("When you feel overwhelmed or anxious, pause and reconnect with a comforting memory.")
+    st.markdown("<br>", unsafe_allow_html=True)
 
+    st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
     uploaded_photo = st.file_uploader("Upload a comforting photo or happy memory snapshot:", type=["png", "jpg", "jpeg"])
 
     if uploaded_photo is not None:
         st.image(uploaded_photo, caption="Your Comforting Memory", use_column_width=True)
         st.success("Take a deep breath. You've navigated hard moments before, and you can get through this.")
     else:
-        st.info("Upload an image from a happy day, vacation, or loved one to anchor yourself during stressful moments[cite: 8, 9].")
+        st.info("Upload an image from a happy day, vacation, or loved one to anchor yourself during stressful moments.")
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ============================================================
-# PAGE 4: PSYCHOLOGIST PORTAL & CONSENT (SYNOPSIS OBJECTIVE 6)
+# PAGE 4: PSYCHOLOGIST PORTAL & CONSENT
 # ============================================================
 
 elif app_mode == "🩺 Psychologist Portal & Consent":
     st.title("🩺 Authorized Psychologist Portal")
-    st.markdown("Secure clinical access view respecting patient-controlled consent permissions[cite: 10, 11].")
+    st.markdown("Secure clinical access view respecting patient-controlled consent permissions.")
+    st.markdown("<br>", unsafe_allow_html=True)
 
     df = load_mood_history()
 
     if df.empty:
         st.info("No patient journal records available.")
     else:
-        st.warning("🔒 Note: Display is filtered dynamically based on patient-configured consent settings (Full Access, Brief Summary Only, or No Access)[cite: 10, 11].")
+        st.warning("🔒 Note: Display is filtered dynamically based on patient-configured consent settings (Full Access, Brief Summary Only, or No Access).")
+        st.markdown("<br>", unsafe_allow_html=True)
 
-        # Process entries based on consent level rules
         portal_records = []
         for index, row in df.iterrows():
             level = row["consent_level"]
@@ -416,18 +540,19 @@ elif app_mode == "🩺 Psychologist Portal & Consent":
                     "Journal Text": "[HIDDEN BY PATIENT CONSENT - SUMMARY ONLY]"
                 })
             else:
-                # No Access - completely filtered out or masked
                 continue
 
         if not portal_records:
             st.info("No entries have been granted sharing access by the patient.")
         else:
+            st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
             portal_df = pd.DataFrame(portal_records)
             st.dataframe(portal_df, use_container_width=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ============================================================
 # ACTIVATE LIVE BACKGROUND SCRIPT
 # ============================================================
 
-st.html(live_background, unsafe_allow_javascript=True)
+st.html(live_background)
