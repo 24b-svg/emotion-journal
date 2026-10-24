@@ -383,7 +383,7 @@ app_mode = st.sidebar.radio("Go to", [
 
 if app_mode == "✍️ Journal & Ambience":
     st.title("🌿 Emotion-Responsive Intelligent Journaling")
-    st.markdown("Write freely. Your surroundings quietly respond to your emotions.")
+    st.markdown("Write freely. Your surroundings quietly respond to your emotions[cite: 8].")
     st.markdown("<br>", unsafe_allow_html=True)
 
     st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
@@ -466,7 +466,7 @@ if app_mode == "✍️ Journal & Ambience":
 
 elif app_mode == "📊 Mood Timeline & Analytics":
     st.title("📊 Your Emotional Journey")
-    st.markdown("Track your emotional patterns over time.")
+    st.markdown("Track your emotional patterns over time[cite: 8].")
     st.markdown("<br>", unsafe_allow_html=True)
 
     df = load_mood_history()
@@ -477,7 +477,6 @@ elif app_mode == "📊 Mood Timeline & Analytics":
         st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
         st.subheader("📈 Emotion Frequency Distribution")
         
-        # FIXED PLOTLY CHART: Explicit dark font colors for absolute visibility
         fig_counts = px.histogram(df, x="emotion", color="emotion", title="Entries per Emotion",
                                  color_discrete_map=EMOTION_COLORS)
         fig_counts.update_layout(
@@ -506,17 +505,27 @@ elif app_mode == "📊 Mood Timeline & Analytics":
 
 elif app_mode == "📸 Gentle Memory Recall":
     st.title("📸 Gentle Memory Recall")
-    st.markdown("When you feel overwhelmed or anxious, pause and reconnect with a comforting memory.")
+    st.markdown("When you feel overwhelmed or anxious, pause and reconnect with a comforting memory[cite: 8, 9].")
     st.markdown("<br>", unsafe_allow_html=True)
 
     st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
-    uploaded_photo = st.file_uploader("Upload a comforting photo or happy memory snapshot:", type=["png", "jpg", "jpeg"])
+    
+    uploaded_photos = st.file_uploader(
+        "Upload comforting photos or happy memory snapshots:", 
+        type=["png", "jpg", "jpeg"], 
+        accept_multiple_files=True
+    )
 
-    if uploaded_photo is not None:
-        st.image(uploaded_photo, caption="Your Comforting Memory", use_container_width=True)
-        st.success("Take a deep breath. You've navigated hard moments before, and you can get through this.")
+    if uploaded_photos:
+        st.success(f"Successfully anchored {len(uploaded_photos)} memory/memories. Take a deep breath.")
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        for uploaded_photo in uploaded_photos:
+            st.image(uploaded_photo, caption=f"Grounding Memory: {uploaded_photo.name}", use_column_width=True)
+            st.markdown("<hr style='border-top: 1px solid #E2E8F0; margin: 20px 0;'>", unsafe_allow_html=True)
     else:
-        st.info("Upload an image from a happy day, vacation, or loved one to anchor yourself during stressful moments.")
+        st.info("Upload multiple images from happy days, vacations, or loved ones to anchor yourself during stressful moments[cite: 8, 9].")
+        
     st.markdown("</div>", unsafe_allow_html=True)
 
 
